@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import WinLose from "./WinLose.vue";
+import WinLose from "@/WinLose.vue";
 
 export default {
   name: "MathQuiz",

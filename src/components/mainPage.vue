@@ -10,8 +10,7 @@
   </template>
   
   <script>
-  import MathQuiz from "./mathQuiz.vue";
-  import TakeTheNumber from "./takeTheNumber.vue";
+
   export default {
     name: "MainPage",
     cmponents: {MathQuiz, TakeTheNumber},

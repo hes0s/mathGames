@@ -38,31 +38,63 @@ export default {
   },
   methods: {
     generateQuestion() {
-      const num1 = Math.floor(Math.random() * 10) + 1
-      const num2 = Math.floor(Math.random() * 10) + 1
-      return {
-        text: `${num1} + ${num2} = ?`,
-        answer: num1 + num2,
-      }
-    },
-    checkAnswer() {
-      if (parseInt(this.userAnswer) === this.question.answer) {
-        this.score += 10
-        this.userAnswer = ''
-        this.question = this.generateQuestion()
-        if (this.score >= 100) {
-          this.gameOver = true
-          clearInterval(this.timer)
+      const questionType = Math.floor(Math.random() * 3) // Randomly choose the type of question
+      if (questionType === 0) {
+        // Pythagorean theorem question
+        const a = Math.floor(Math.random() * 10) + 1
+        const b = Math.floor(Math.random() * 10) + 1
+        return {
+          text: `Care este ipotenuza unui triunghi dreptunghic cu laturile ${a} și ${b}?`,
+          answer: Math.sqrt(a * a + b * b).toFixed(2), // Pythagorean theorem
+        }
+      } else if (questionType === 1) {
+        // Find a missing leg (given hypotenuse and one leg)
+        const hypotenuse = Math.floor(Math.random() * 10) + 1
+        const leg = Math.floor(Math.random() * hypotenuse) + 1
+        return {
+          text: `Care este lungimea laturii lipsă a unui triunghi dreptunghic cu ipotenuza ${hypotenuse} și o latură ${leg}?`,
+          answer: Math.sqrt(hypotenuse * hypotenuse - leg * leg).toFixed(2),
+        }
+      } else {
+        // Basic addition question
+        const num1 = Math.floor(Math.random() * 10) + 1
+        const num2 = Math.floor(Math.random() * 10) + 1
+        return {
+          text: `${num1} + ${num2} = ?`,
+          answer: num1 + num2,
         }
       }
     },
+
+    checkAnswer() {
+      // Check if the answer is correct with a precision of two decimal places
+      if (parseFloat(this.userAnswer).toFixed(2) === this.question.answer) {
+        this.score += 10 // Increase score by 10
+        this.userAnswer = '' // Clear user input
+        this.question = this.generateQuestion() // Generate new question
+      } else {
+        // Decrease lives if the answer is wrong
+        this.lives--
+        if (this.lives === 0) {
+          this.gameOver = true
+          clearInterval(this.timer) // Stop the timer
+        }
+      }
+
+      // Check for game over condition
+      if (this.score >= 100) {
+        this.gameOver = true
+        clearInterval(this.timer)
+      }
+    },
+
     startTimer() {
       this.timer = setInterval(() => {
         if (this.timeLeft > 0) {
           this.timeLeft--
         } else {
-          this.lives--
-          this.timeLeft = 10
+          this.lives-- // Lose a life when time runs out
+          this.timeLeft = 60
           if (this.lives === 0) {
             this.gameOver = true
             clearInterval(this.timer)
@@ -70,9 +102,10 @@ export default {
         }
       }, 1000)
     },
+
     restartGame() {
       this.score = 0
-      this.timeLeft = 10
+      this.timeLeft = 60
       this.gameOver = false
       this.userAnswer = ''
       this.question = this.generateQuestion()
@@ -80,6 +113,7 @@ export default {
       this.startTimer()
     },
   },
+
   mounted() {
     this.startTimer()
   },

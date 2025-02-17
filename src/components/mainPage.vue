@@ -2,7 +2,7 @@
     <div class="main-container">
       <h1 class="title">Alege un joc matematic</h1>
       <div class="game-options">
-        <router-link to="/math-quiz" class="btn">Math Quiz Battle</router-link>
+        <router-link to="/quiz" class="btn">Math Quiz Battle</router-link>
         <router-link to="/guess-the-number" class="btn">Ghiceste Numărul</router-link>
         <button class="btn disabled">Joc nou (Curând)</button>
       </div>
@@ -10,8 +10,11 @@
   </template>
   
   <script>
+  import MathQuiz from "./mathQuiz.vue";
+  import TakeTheNumber from "./takeTheNumber.vue";
   export default {
     name: "MainPage",
+    cmponents: {MathQuiz, TakeTheNumber},
   };
   </script>
   

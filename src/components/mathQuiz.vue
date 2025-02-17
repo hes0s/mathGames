@@ -91,7 +91,7 @@ export default {
           this.timeLeft--
         } else {
           this.lives--
-          this.timeLeft = 10
+          this.timeLeft = 60
           if (this.lives === 0) {
             this.gameOver = true
             clearInterval(this.timer)
@@ -102,7 +102,7 @@ export default {
 
     restartGame() {
       this.score = 0
-      this.timeLeft = 10
+      this.timeLeft = 60
       this.gameOver = false
       this.userAnswer = ''
       this.question = this.generateQuestion()

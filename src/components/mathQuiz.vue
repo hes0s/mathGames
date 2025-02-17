@@ -3,13 +3,8 @@
     <h1 class="title">Math Quiz Battle</h1>
     <div v-if="!gameOver" class="game-box">
       <p class="question">{{ question.text }}</p>
-      <input
-        v-model="userAnswer"
-        type="number"
-        placeholder="Răspunsul tău"
-        @keyup.enter="checkAnswer"
-        class="input-box"
-      />
+      <input v-model="userAnswer" type="text" placeholder="Răspunsul tău" class="input-box" />
+      <button @click="insertRadical" class="btn mb-3">Radical (√)</button>
       <button @click="checkAnswer" class="btn">Trimite</button>
       <p class="score">Scor: {{ score }}</p>
       <p class="timer">Timp rămas: {{ timeLeft }} sec</p>
@@ -21,7 +16,6 @@
 
 <script>
 import WinLose from './WinLose.vue'
-
 export default {
   name: 'MathQuiz',
   components: { WinLose },
@@ -66,22 +60,25 @@ export default {
       }
     },
 
+    insertRadical() {
+      // Insert the radical symbol (√) at the end of the user's current answer
+      this.userAnswer += '√'
+    },
+
     checkAnswer() {
-      // Check if the answer is correct with a precision of two decimal places
-      if (parseFloat(this.userAnswer).toFixed(2) === this.question.answer) {
-        this.score += 10 // Increase score by 10
-        this.userAnswer = '' // Clear user input
-        this.question = this.generateQuestion() // Generate new question
+      const answer = this.question.answer
+      if (this.userAnswer === answer) {
+        this.score += 10
+        this.userAnswer = ''
+        this.question = this.generateQuestion()
       } else {
-        // Decrease lives if the answer is wrong
         this.lives--
         if (this.lives === 0) {
           this.gameOver = true
-          clearInterval(this.timer) // Stop the timer
+          clearInterval(this.timer)
         }
       }
 
-      // Check for game over condition
       if (this.score >= 100) {
         this.gameOver = true
         clearInterval(this.timer)
@@ -93,8 +90,8 @@ export default {
         if (this.timeLeft > 0) {
           this.timeLeft--
         } else {
-          this.lives-- // Lose a life when time runs out
-          this.timeLeft = 60
+          this.lives--
+          this.timeLeft = 10
           if (this.lives === 0) {
             this.gameOver = true
             clearInterval(this.timer)
@@ -105,7 +102,7 @@ export default {
 
     restartGame() {
       this.score = 0
-      this.timeLeft = 60
+      this.timeLeft = 10
       this.gameOver = false
       this.userAnswer = ''
       this.question = this.generateQuestion()
